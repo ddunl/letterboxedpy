@@ -14,9 +14,7 @@ def noRepeats(str1):
 with open("words.txt") as dictFile:
 	with open("modWords.txt", "w") as newDictFile:
 		for line in dictFile:
-			if line[0] in caps:
-				pass
-			elif noRepeats(line) and line[:-1].isalpha() and line[:-1].islower():
+			if noRepeats(line) and line[:-1].isalpha() and line[:-1].islower():
 				newDictFile.write(line)
 
 
