@@ -1,13 +1,16 @@
 class board:
-	def __init__(self, puzzStr, filename = "modWords.txt"):
+	def __init__(self, puzzStr, filename = "modWords2.txt"):
 		if len(puzzStr) != 12:
 			raise Exception("Length of puzzle is invalid. Length of puzzle was: {}".format(len(puzzStr)))
+
 		self.puzzDict = {i:-1 for i in "abcdefghijklmnopqrstuvwxyz"}
+
 		for i, letter in enumerate(puzzStr):
 			self.puzzDict[letter] = i/3
-		print self.puzzDict
 
 		self.filename = filename
+
+		self.spanningSet = set([i for i in puzzStr])
 
 	def validWord(self, word):
 		last = -1
@@ -23,16 +26,69 @@ class board:
 		else:
 			return True
 
-	def checkWordList(self):
+	def checkWordList(self, cutoff = 2):
+		temp = []
 		with open(self.filename) as wordList:
+
 			for word in wordList:
-				if self.validWord(word[:-1]):
-					print word[:-1]
+				if self.validWord(word[:-cutoff]):
+					temp.append(word[:-cutoff])
+		
+		temp.sort(key = len, reverse = True)
+		self.possWords = temp
+		
+		return 
+
+
+	def isSolution(self, arr):
+		allLetters = set()
+
+		for word in arr:
+			for letter in word:
+				allLetters.add(letter)
+
+		if allLetters == self.spanningSet:
+			return True
+
+		return False
+
+
+	def findSolutions(self):
+		temp = []
+		counter = 0
+		for word in self.possWords:
+			for word2 in self.possWords:
+				if self.isSolution([word, word2]):
+					if word[-1] == word2[0]:
+						counter += 1
+						temp.append([word, word2])
+		self.solutions = temp
+		return
+						
+
+	def solve(self, sortby = ""):
+
+		self.checkWordList()
+		print "Found all valid words... ({})".format(len(self.possWords))
+
+		self.findSolutions()
+		print "Found all solutions... ({})".format(len(self.solutions))
+
+
+		if sortby == "shortest":
+			self.solutions.sort(key = lambda x: len(x[0]) + len(x[1]))
+		elif sortby == "longest":
+			self.solutions.sort(key = lambda x: len(x[0]) + len(x[1]), reverse = True)
+		else:
+			self.solutions.sort()
+
+		for i, sol in enumerate(self.solutions):
+			print "{}. {} {}".format(i, sol[0], sol[1])
+		
+  
 
 
 
+b = board("mpsagtudorni")
 
-b = board("emlakustbocr")
-print b.validWord("laces")
-
-b.checkWordList()
+b.solve(sortby = "longest")
