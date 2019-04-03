@@ -5,16 +5,16 @@ class board:
 		if len(puzzStr) != 12:
 			raise Exception("Length of puzzle is invalid. Length of puzzle was: {}".format(len(puzzStr)))
 
-		self.puzzDict = {i:-1 for i in "abcdefghijklmnopqrstuvwxyz"}
+		self.puzzDict = {i:-1 for i in "abcdefghijklmnopqrstuvwxyz"}#could use a default dict for this but this is fine
 
 		for i, letter in enumerate(puzzStr):
-			self.puzzDict[letter] = i/3
+			self.puzzDict[letter] = i/3 #dict where letter corresponds to side number
 
 		self.filename = filename
 
 		self.spanningSet = set([i for i in puzzStr])
 
-	def validWord(self, word):
+	def validWord(self, word): #check if word is playable
 		last = -1
 		for letter in word:
 			side = self.puzzDict[letter]
@@ -28,7 +28,7 @@ class board:
 		else:
 			return True
 
-	def checkWordList(self, cutoff = 2):
+	def checkWordList(self, cutoff = 2): #check file to find all valid words
 		temp = []
 		with open(self.filename) as wordList:
 
@@ -42,7 +42,7 @@ class board:
 		return 
 
 
-	def isSolution(self, arr):
+	def isSolution(self, arr): #decide if something is solution
 		allLetters = set()
 
 		for word in arr:
