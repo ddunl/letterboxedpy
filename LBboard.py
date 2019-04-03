@@ -1,3 +1,5 @@
+import sys
+
 class board:
 	def __init__(self, puzzStr, filename = "modWords2.txt"):
 		if len(puzzStr) != 12:
@@ -77,10 +79,12 @@ class board:
 
 		if sortby == "shortest":
 			self.solutions.sort(key = lambda x: len(x[0]) + len(x[1]))
-		elif sortby == "longest":
-			self.solutions.sort(key = lambda x: len(x[0]) + len(x[1]), reverse = True)
-		else:
+		
+		elif sortby == "alpha":
 			self.solutions.sort()
+
+		else:
+			self.solutions.sort(key = lambda x: len(x[0]) + len(x[1]), reverse = True)
 
 		for i, sol in enumerate(self.solutions):
 			print "{}. {} {}".format(i, sol[0], sol[1])
@@ -89,6 +93,11 @@ class board:
 
 
 
-b = board("mpsagtudorni")
 
-b.solve(sortby = "longest")
+
+
+if len(sys.argv) == 2:
+	board(sys.argv[1]).solve()
+
+elif len(sys.argv) == 3:
+	board(sys.argv[1].solve(sortby = sys.argv[2]))
