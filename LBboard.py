@@ -1,4 +1,4 @@
-import sys
+import sys, time
 
 class board:
 	def __init__(self, puzzStr, filename = "modWords2.txt"):
@@ -91,13 +91,12 @@ class board:
 		
   
 
-
-
-
-
+start = time.time()
 
 if len(sys.argv) == 2:
 	board(sys.argv[1]).solve()
 
 elif len(sys.argv) == 3:
 	board(sys.argv[1].solve(sortby = sys.argv[2]))
+
+print "Took {} seconds".format(time.time() - start)
